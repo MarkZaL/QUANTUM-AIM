@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantumAim - Ultimate 3D FPS Aim Trainer (Aim Lab Edition)</title>
+    <meta name="description" content="Next-Generation 3D FPS Aim Trainer with real esports sensitivity conversion, reaction analytics, and customizable crosshairs.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Local Dependencies for 100% Reliable Offline / Instant Loading -->
+    <script src="js/three.min.js"></script>
+    <script src="js/lucide.min.js"></script>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/hud.css">
+    <link rel="stylesheet" href="css/modals.css">
+</head>
+<body>
+    <!-- Background Animated Ambient Gradients -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
+    <!-- MAIN APP CONTAINER -->
+    <div id="app" class="app-container">
+
+        <!-- ================= MAIN MENU SCREEN ================= -->
+        <div id="main-menu" class="screen active">
+            <!-- Header Navbar -->
+            <header class="main-header">
+                <div class="brand">
+                    <div class="brand-logo">
+                        <i data-lucide="crosshair"></i>
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-name">QUANTUM<span class="highlight">AIM</span></span>
+                        <span class="brand-tag">AIM LAB WEB EDITION</span>
+                    </div>
+                </div>
+                <div class="header-stats">
+                    <div class="quick-stat-badge">
+                        <i data-lucide="award"></i>
+                        <div>
+                            <div class="stat-label">RANK TIER</div>
+                            <div class="stat-value" id="nav-rank-badge">DIAMOND I</div>
+                        </div>
+                    </div>
+                    <div class="quick-stat-badge">
+                        <i data-lucide="zap"></i>
+                        <div>
+                            <div class="stat-label">BEST ACCURACY</div>
+                            <div class="stat-value" id="nav-best-acc">94.8%</div>
+                        </div>
+                    </div>
+                    <div class="quick-stat-badge">
+                        <i data-lucide="gauge"></i>
+                        <div>
+                            <div class="stat-label">REFRESH RATE</div>
+                            <div class="stat-value" id="nav-fps-badge" style="color: var(--lime);">180 FPS</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button id="btn-open-settings" class="btn-icon" title="Settings & Sensitivity">
+                        <i data-lucide="settings"></i>
+                    </button>
+                    <button id="btn-open-crosshair" class="btn-icon" title="Crosshair Studio">
+                        <i data-lucide="disc"></i>
+                    </button>
+                    <button id="btn-open-stats" class="btn-icon" title="Performance History">
+                        <i data-lucide="bar-chart-2"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Hero & Mode Select Section -->
+            <main class="menu-content">
+                <div class="hero-banner">
+                    <div class="hero-pill"><i data-lucide="flame"></i> ESPORTS PRECISION ENGINE</div>
+                    <h1 class="hero-title">TRAIN YOUR AIM.<br><span class="gradient-text">DOMINATE THE LOBBY.</span></h1>
+                    <p class="hero-desc">ฝึกฝนปฏิกิริยา ความแม่นยำ และความเร็วด้วยระบบจำลองมุมมอง 3D FPS พร้อมตัวแปลง Sensitivity ที่แม่นยำระดับ 1:1 เทียบเท่า Valorant, CS2, Apex Legends และ Overwatch</p>
+                </div>
+
+                <!-- Mode Cards Grid -->
+                <div class="modes-grid-container">
+                    <div class="section-title-wrapper">
+                        <h2 class="section-title"><i data-lucide="target"></i> SELECT TRAINING DRILL</h2>
+                        <span class="section-subtitle">เลือกโหมดการฝึกเพื่อพัฒนาทักษะเฉพาะด้าน</span>
+                    </div>
+
+                    <div class="modes-grid">
+                        <!-- Mode 1: Gridshot -->
+                        <div class="mode-card featured" data-mode="gridshot">
+                            <div class="card-glow"></div>
+                            <div class="mode-badge"><i data-lucide="zap"></i> FLICK SPEED</div>
+                            <div class="mode-visual gridshot-visual">
+                                <div class="target-demo-sphere t1"></div>
+                                <div class="target-demo-sphere t2"></div>
+                                <div class="target-demo-sphere t3"></div>
+                            </div>
+                            <div class="mode-info">
+                                <h3 class="mode-name">GRIDSHOT</h3>
+                                <p class="mode-desc">เป้า 3 จุดเกิดต่อเนื่อง ยิงให้เร็วและแม่นยำที่สุดใน 60 วินาทีเพื่อฝึก Flicking</p>
+                                <div class="mode-meta">
+                                    <span><i data-lucide="clock"></i> 60s</span>
+                                    <span><i data-lucide="trophy"></i> Best: <strong id="best-gridshot">0</strong></span>
+                                </div>
+                            </div>
+                            <button class="btn-play-mode" data-mode="gridshot">
+                                <span>PLAY DRILL</span>
+                                <i data-lucide="play"></i>
+                            </button>
+                        </div>
+
+                        <!-- Mode 2: Spidershot -->
+                        <div class="mode-card" data-mode="spidershot">
+                            <div class="card-glow"></div>
+                            <div class="mode-badge"><i data-lucide="maximize-2"></i> DISTANCE & PRECISION</div>
+                            <div class="mode-visual spidershot-visual">
+                                <div class="target-demo-sphere center"></div>
+                                <div class="target-demo-sphere outer"></div>
+                            </div>
+                            <div class="mode-info">
+                                <h3 class="mode-name">SPIDERSHOT</h3>
+                                <p class="mode-desc">เป้าสลับระหว่างจุดศูนย์กลางและมุมต่างๆ หลากหลายขนาด ฝึกการกะระยะและปรับสายตา</p>
+                                <div class="mode-meta">
+                                    <span><i data-lucide="clock"></i> 60s</span>
+                                    <span><i data-lucide="trophy"></i> Best: <strong id="best-spidershot">0</strong></span>
+                                </div>
+                            </div>
+                            <button class="btn-play-mode" data-mode="spidershot">
+                                <span>PLAY DRILL</span>
+                                <i data-lucide="play"></i>
+                            </button>
+                        </div>
+
+                        <!-- Mode 3: Tracking -->
+                        <div class="mode-card" data-mode="tracking">
+                            <div class="card-glow"></div>
+                            <div class="mode-badge"><i data-lucide="activity"></i> SMOOTHNESS</div>
+                            <div class="mode-visual tracking-visual">
+                                <div class="tracking-path"></div>
+                                <div class="target-demo-sphere tracking-orb"></div>
+                            </div>
+                            <div class="mode-info">
+                                <h3 class="mode-name">TRACKING (STRAFE)</h3>
+                                <p class="mode-desc">เป้าเคลื่อนที่แบบไดนามิก เล็งแช่ให้เป้าอยู่ตรงกลางเพื่อฝึกการตามเป้าหมายแบบเรียลไทม์</p>
+                                <div class="mode-meta">
+                                    <span><i data-lucide="clock"></i> 45s</span>
+                                    <span><i data-lucide="trophy"></i> Best: <strong id="best-tracking">0%</strong></span>
+                                </div>
+                            </div>
+                            <button class="btn-play-mode" data-mode="tracking">
+                                <span>PLAY DRILL</span>
+                                <i data-lucide="play"></i>
+                            </button>
+                        </div>
+
+                        <!-- Mode 4: Microflex -->
+                        <div class="mode-card" data-mode="microflex">
+                            <div class="card-glow"></div>
+                            <div class="mode-badge"><i data-lucide="crosshair"></i> MICRO-ADJUSTMENT</div>
+                            <div class="mode-visual microflex-visual">
+                                <div class="target-demo-sphere micro t-small1"></div>
+                                <div class="target-demo-sphere micro t-small2"></div>
+                            </div>
+                            <div class="mode-info">
+                                <h3 class="mode-name">MICROFLEX</h3>
+                                <p class="mode-desc">เป้าขนาดเล็กกระจายตัวในระยะประชิด ฝึกการขยับเมาส์ระดับพิกเซลสำหรับ Headshot</p>
+                                <div class="mode-meta">
+                                    <span><i data-lucide="clock"></i> 45s</span>
+                                    <span><i data-lucide="trophy"></i> Best: <strong id="best-microflex">0</strong></span>
+                                </div>
+                            </div>
+                            <button class="btn-play-mode" data-mode="microflex">
+                                <span>PLAY DRILL</span>
+                                <i data-lucide="play"></i>
+                            </button>
+                        </div>
+
+                        <!-- Mode 5: Reflex Reaction -->
+                        <div class="mode-card" data-mode="reflex">
+                            <div class="card-glow"></div>
+                            <div class="mode-badge"><i data-lucide="timer"></i> REACTION TIME</div>
+                            <div class="mode-visual reflex-visual">
+                                <div class="target-demo-sphere reflex-pulse"></div>
+                            </div>
+                            <div class="mode-info">
+                                <h3 class="mode-name">REFLEX TIME</h3>
+                                <p class="mode-desc">วัดเวลาตอบสนองการตัดสินใจ ยิงเป้าหมายที่ปรากฏขึ้นแบบสุ่มให้เร็วที่สุด (ms)</p>
+                                <div class="mode-meta">
+                                    <span><i data-lucide="repeat"></i> 10 Rounds</span>
+                                    <span><i data-lucide="trophy"></i> Best: <strong id="best-reflex">0 ms</strong></span>
+                                </div>
+                            </div>
+                            <button class="btn-play-mode" data-mode="reflex">
+                                <span>PLAY DRILL</span>
+                                <i data-lucide="play"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Bottom Control Strip -->
+            <footer class="main-footer">
+                <div class="footer-left">
+                    <div class="current-profile-indicator">
+                        <span class="profile-label">CURRENT SENS PROFILE:</span>
+                        <span class="profile-val" id="footer-sens-preview">Valorant (0.35 @ 800 DPI)</span>
+                    </div>
+                </div>
+                <div class="footer-right">
+                    <button id="btn-quick-warmup" class="btn-secondary">
+                        <i data-lucide="play-circle"></i> QUICK WARMUP (GRIDSHOT)
+                    </button>
+                </div>
+            </footer>
+        </div>
+
+
+        <!-- ================= GAMEPLAY ARENA SCREEN ================= -->
+        <div id="game-screen" class="screen">
+            <!-- 3D WebGL Canvas Container -->
+            <div id="canvas-container"></div>
+
+            <!-- Custom 2D Crosshair Canvas Overlay -->
+            <canvas id="crosshair-canvas" width="200" height="200"></canvas>
+
+            <!-- Hit Impact / Miss Flash Overlay -->
+            <div id="damage-vignette" class="damage-vignette"></div>
+
+            <!-- Floating In-Game HUD -->
+            <div class="game-hud">
+                <!-- Top Header HUD -->
+                <div class="hud-top-bar">
+                    <!-- Left: Mode and Time -->
+                    <div class="hud-stat-box mode-box">
+                        <span class="hud-label">DRILL</span>
+                        <span class="hud-value" id="hud-mode-name">GRIDSHOT</span>
+                    </div>
+
+                    <div class="hud-stat-box timer-box">
+                        <span class="hud-label"><i data-lucide="clock"></i> TIME LEFT</span>
+                        <span class="hud-value time-val" id="hud-timer">60.0</span>
+                        <div class="timer-progress-bar">
+                            <div id="hud-timer-fill" class="timer-fill"></div>
+                        </div>
+                    </div>
+
+                    <!-- Center: Score & Combo Multiplier -->
+                    <div class="hud-stat-box score-box">
+                        <span class="hud-label">SCORE</span>
+                        <span class="hud-value score-val" id="hud-score">000,000</span>
+                        <div class="combo-badge" id="hud-combo-badge">
+                            <i data-lucide="flame"></i> <span id="hud-combo-text">1.0x</span> STREAK (<span id="hud-streak-count">0</span>)
+                        </div>
+                    </div>
+
+                    <!-- Right: Accuracy & Target Rate -->
+                    <div class="hud-stat-box acc-box">
+                        <span class="hud-label">ACCURACY</span>
+                        <span class="hud-value acc-val" id="hud-accuracy">100%</span>
+                        <div class="hit-miss-pill">
+                            <span class="hit-text"><i data-lucide="check"></i> <span id="hud-hits">0</span></span>
+                            <span class="miss-text"><i data-lucide="x"></i> <span id="hud-misses">0</span></span>
+                        </div>
+                    </div>
+
+                    <!-- Far Right: Live FPS Counter -->
+                    <div class="hud-stat-box fps-box">
+                        <span class="hud-label"><i data-lucide="gauge"></i> FPS</span>
+                        <span class="hud-value fps-val" id="hud-fps-val">180</span>
+                        <div class="fps-ms-pill"><span id="hud-frametime-val">5.5</span> ms</div>
+                    </div>
+                </div>
+
+                <!-- Bottom Center Alerts / Reaction Time Feed -->
+                <div class="hud-feed" id="hud-reaction-feed"></div>
+
+                <!-- ESC / Pause Reminder Pill -->
+                <div class="hud-pause-hint">
+                    Press <kbd>ESC</kbd> to Pause &bull; Press <kbd>R</kbd> to Quick Restart
+                </div>
+            </div>
+
+            <!-- Pre-game Countdown Overlay -->
+            <div id="countdown-overlay" class="countdown-overlay hidden">
+                <div class="countdown-card">
+                    <div class="countdown-mode-title" id="countdown-mode-title">GRIDSHOT</div>
+                    <div class="countdown-sub">CLICK TO LOCK MOUSE & FOCUS</div>
+                    <div class="countdown-number" id="countdown-number">3</div>
+                    <div class="countdown-tip" id="countdown-tip">Tip: รักษาระดับสายตาไว้ตรงกลางและยิงเป้าหมายที่อยู่ใกล้ที่สุดก่อน</div>
+                </div>
+            </div>
+
+            <!-- In-Game Pause Menu -->
+            <div id="pause-overlay" class="pause-overlay hidden">
+                <div class="pause-card">
+                    <div class="pause-header">
+                        <i data-lucide="pause-circle"></i>
+                        <h2>GAME PAUSED</h2>
+                    </div>
+                    <div class="pause-quick-sens">
+                        <label for="pause-sens-slider">Live Sensitivity: <span id="pause-sens-val">0.35</span></label>
+                        <input type="range" id="pause-sens-slider" min="0.01" max="5.0" step="0.01" value="0.35">
+                    </div>
+                    <div class="pause-actions">
+                        <button id="btn-resume-game" class="btn-primary"><i data-lucide="play"></i> RESUME (CLICK)</button>
+                        <button id="btn-restart-game" class="btn-secondary"><i data-lucide="rotate-ccw"></i> RESTART DRILL</button>
+                        <button id="btn-quit-to-menu" class="btn-danger"><i data-lucide="log-out"></i> QUIT TO MENU</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ================= RESULTS SCREEN MODAL ================= -->
+        <div id="results-modal" class="modal-overlay hidden">
+            <div class="modal-card results-card">
+                <div class="results-header">
+                    <div class="results-title-group">
+                        <div class="results-tag" id="res-mode-tag">GRIDSHOT COMPLETED</div>
+                        <h2 class="results-title">PERFORMANCE ANALYSIS</h2>
+                    </div>
+                    <div class="results-rank-badge" id="res-rank-badge">
+                        <div class="rank-icon-wrapper" id="res-rank-icon">
+                            <i data-lucide="award"></i>
+                        </div>
+                        <div class="rank-info">
+                            <div class="rank-name" id="res-rank-name">DIAMOND</div>
+                            <div class="rank-tier" id="res-rank-tier">TIER III</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Metrics Grid -->
+                <div class="results-metrics-grid">
+                    <div class="metric-card hero-metric">
+                        <div class="metric-label"><i data-lucide="trophy"></i> FINAL SCORE</div>
+                        <div class="metric-value highlight" id="res-score">84,520</div>
+                        <div class="metric-sub" id="res-high-score-badge">🏆 NEW PERSONAL BEST!</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label"><i data-lucide="target"></i> ACCURACY</div>
+                        <div class="metric-value" id="res-accuracy">94.6%</div>
+                        <div class="metric-sub"><span id="res-hits">142</span> Hits / <span id="res-misses">8</span> Misses</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label"><i data-lucide="zap"></i> AVG REACTION TIME</div>
+                        <div class="metric-value" id="res-reaction">242 <span class="unit">ms</span></div>
+                        <div class="metric-sub">Time to acquire & hit</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label"><i data-lucide="activity"></i> TARGETS / SEC</div>
+                        <div class="metric-value" id="res-tps">2.36</div>
+                        <div class="metric-sub">Kills per second rate</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label"><i data-lucide="flame"></i> MAX STREAK</div>
+                        <div class="metric-value" id="res-streak">38</div>
+                        <div class="metric-sub">Consecutive hits</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-label"><i data-lucide="crosshair"></i> TOTAL SHOTS</div>
+                        <div class="metric-value" id="res-total-shots">150</div>
+                        <div class="metric-sub">Fired during drill</div>
+                    </div>
+                </div>
+
+                <!-- Consistency Graph Canvas -->
+                <div class="results-chart-section">
+                    <div class="chart-header">
+                        <span class="chart-title"><i data-lucide="trending-up"></i> DRILL PACE & ACCURACY OVER TIME</span>
+                    </div>
+                    <canvas id="results-chart" width="700" height="150"></canvas>
+                </div>
+
+                <!-- Modal Action Buttons -->
+                <div class="results-actions">
+                    <button id="btn-results-retry" class="btn-primary">
+                        <i data-lucide="rotate-ccw"></i> PLAY AGAIN (<kbd>SPACE</kbd>)
+                    </button>
+                    <button id="btn-results-menu" class="btn-secondary">
+                        <i data-lucide="grid"></i> ALL DRILLS
+                    </button>
+                    <button id="btn-results-share" class="btn-ghost">
+                        <i data-lucide="share-2"></i> COPY STATS
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ================= SETTINGS & SENSITIVITY MODAL ================= -->
+        <div id="settings-modal" class="modal-overlay hidden">
+            <div class="modal-card settings-card">
+                <div class="modal-header">
+                    <div class="modal-title-group">
+                        <i data-lucide="sliders"></i>
+                        <h2>GAME SETTINGS & SENSITIVITY</h2>
+                    </div>
+                    <button class="btn-modal-close" id="btn-close-settings">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+
+                <!-- Settings Tabs -->
+                <div class="settings-tabs">
+                    <button class="tab-btn active" data-tab="tab-sens"><i data-lucide="mouse-pointer"></i> SENSITIVITY & CONTROLS</button>
+                    <button class="tab-btn" data-tab="tab-audio"><i data-lucide="volume-2"></i> AUDIO & HITSOUNDS</button>
+                    <button class="tab-btn" data-tab="tab-video"><i data-lucide="monitor"></i> DISPLAY & TARGETS</button>
+                </div>
+
+                <div class="modal-tab-content">
+                    <!-- TAB 1: SENSITIVITY -->
+                    <div class="tab-pane active" id="tab-sens">
+                        <div class="settings-group">
+                            <h4 class="group-title"><i data-lucide="gamepad-2"></i> GAME PRESET CONVERSION</h4>
+                            <div class="form-row">
+                                <label for="sens-game-select">Match Sensitivity From Game:</label>
+                                <select id="sens-game-select" class="custom-select">
+                                    <option value="valorant" selected>Valorant</option>
+                                    <option value="cs2">Counter-Strike 2 / CS:GO / Source</option>
+                                    <option value="apex">Apex Legends</option>
+                                    <option value="overwatch">Overwatch 2</option>
+                                    <option value="fortnite">Fortnite (Slider %)</option>
+                                    <option value="r6">Rainbow Six Siege</option>
+                                </select>
+                            </div>
+
+                            <div class="form-grid-2">
+                                <div class="form-row">
+                                    <label for="input-game-sens">In-Game Sensitivity Value:</label>
+                                    <div class="number-input-wrap">
+                                        <input type="number" id="input-game-sens" step="0.001" min="0.001" max="100" value="0.35">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <label for="input-mouse-dpi">Mouse DPI:</label>
+                                    <div class="number-input-wrap">
+                                        <input type="number" id="input-mouse-dpi" step="50" min="100" max="32000" value="800">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Calculated Stats Banner -->
+                            <div class="sens-calc-banner">
+                                <div class="calc-item">
+                                    <span class="calc-label">Calculated eDPI</span>
+                                    <span class="calc-value highlight" id="calc-edpi">280.0</span>
+                                </div>
+                                <div class="calc-item">
+                                    <span class="calc-label">cm / 360° Turn</span>
+                                    <span class="calc-value" id="calc-cm360">46.6 cm</span>
+                                </div>
+                                <div class="calc-item">
+                                    <span class="calc-label">in / 360° Turn</span>
+                                    <span class="calc-value" id="calc-in360">18.3 in</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <h4 class="group-title"><i data-lucide="sliders-horizontal"></i> ADVANCED MOUSE SETTINGS</h4>
+                            <div class="form-row">
+                                <label for="input-fov">Field of View (Horizontal FOV): <span id="fov-val-display">103°</span></label>
+                                <input type="range" id="input-fov" min="70" max="120" step="1" value="103">
+                            </div>
+                            <div class="form-row checkbox-row">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="check-invert-y">
+                                    <span class="checkmark"></span>
+                                    Invert Y-Axis (Vertical Pitch)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: AUDIO & HITSOUNDS -->
+                    <div class="tab-pane" id="tab-audio">
+                        <div class="settings-group">
+                            <h4 class="group-title"><i data-lucide="music"></i> HITSOUND CUSTOMIZER (WEB AUDIO SYNTH)</h4>
+                            <div class="form-row">
+                                <label for="select-hitsound">Target Hit Sound Style:</label>
+                                <div class="select-with-btn">
+                                    <select id="select-hitsound" class="custom-select">
+                                        <option value="valorant" selected>Valorant Headshot (Crisp Ding)</option>
+                                        <option value="quake">Quake / Arena (Classic Bell Ding)</option>
+                                        <option value="pop">Boba Pop (Punchy Bubble)</option>
+                                        <option value="laser">Cyber Laser (High-Tech Blip)</option>
+                                        <option value="metallic">Titanium Spark (Metallic Snap)</option>
+                                    </select>
+                                    <button id="btn-test-hitsound" class="btn-secondary" title="Test Hitsound">
+                                        <i data-lucide="volume-2"></i> TEST
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <label for="audio-master-vol">Master Volume: <span id="master-vol-val">80%</span></label>
+                                <input type="range" id="audio-master-vol" min="0" max="100" step="1" value="80">
+                            </div>
+                            <div class="form-row">
+                                <label for="audio-hitsound-vol">Hit Sound Volume: <span id="hit-vol-val">100%</span></label>
+                                <input type="range" id="audio-hitsound-vol" min="0" max="100" step="1" value="100">
+                            </div>
+                            <div class="form-row checkbox-row">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="check-streak-pitch" checked>
+                                    <span class="checkmark"></span>
+                                    Pitch-Shift Sound on High Kill Streaks (Dynamic Melody)
+                                </label>
+                            </div>
+                            <div class="form-row checkbox-row">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="check-miss-sound" checked>
+                                    <span class="checkmark"></span>
+                                    Play subtle miss click sound on empty shots
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: DISPLAY & TARGETS -->
+                    <div class="tab-pane" id="tab-video">
+                        <div class="settings-group">
+                            <h4 class="group-title"><i data-lucide="circle-dot"></i> TARGET APPEARANCE</h4>
+                            <div class="form-row">
+                                <label>Target Color Theme:</label>
+                                <div class="color-presets-row" id="target-color-presets">
+                                    <button class="color-pill-btn active" data-color="#00f3ff" style="--btn-color: #00f3ff">Cyan Neon</button>
+                                    <button class="color-pill-btn" data-color="#ff0055" style="--btn-color: #ff0055">Ruby Pink</button>
+                                    <button class="color-pill-btn" data-color="#39ff14" style="--btn-color: #39ff14">Lime Acid</button>
+                                    <button class="color-pill-btn" data-color="#ffbe0b" style="--btn-color: #ffbe0b">Solar Gold</button>
+                                    <button class="color-pill-btn" data-color="#ffffff" style="--btn-color: #ffffff">Pure White</button>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <label for="target-glow-slider">Target Emissive Glow: <span id="target-glow-val">1.2x</span></label>
+                                <input type="range" id="target-glow-slider" min="0.2" max="3.0" step="0.1" value="1.2">
+                            </div>
+                        </div>
+
+                        <div class="settings-group">
+                            <h4 class="group-title"><i data-lucide="sparkles"></i> HIT EFFECTS & PARTICLES</h4>
+                            <div class="form-row checkbox-row">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="check-particles" checked>
+                                    <span class="checkmark"></span>
+                                    Explosion Particle Sparks on Target Hit
+                                </label>
+                            </div>
+                            <div class="form-row checkbox-row">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="check-floating-score" checked>
+                                    <span class="checkmark"></span>
+                                    Floating Score Popups (+100)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="btn-reset-settings" class="btn-ghost">Reset Defaults</button>
+                    <button id="btn-save-settings" class="btn-primary">Save & Apply Settings</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ================= CROSSHAIR STUDIO MODAL ================= -->
+        <div id="crosshair-modal" class="modal-overlay hidden">
+            <div class="modal-card crosshair-card">
+                <div class="modal-header">
+                    <div class="modal-title-group">
+                        <i data-lucide="crosshair"></i>
+                        <h2>CROSSHAIR STUDIO</h2>
+                    </div>
+                    <button class="btn-modal-close" id="btn-close-crosshair">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+
+                <div class="crosshair-editor-layout">
+                    <!-- Left: Interactive Live Crosshair Preview Canvas -->
+                    <div class="crosshair-preview-pane">
+                        <div class="preview-backdrop" id="crosshair-preview-box">
+                            <canvas id="crosshair-studio-canvas" width="280" height="280"></canvas>
+                            <div class="target-mockup-sphere"></div>
+                        </div>
+                        <div class="preset-buttons-wrap">
+                            <span class="preset-label">Quick Styles:</span>
+                            <div class="preset-chips">
+                                <button class="chip-btn" data-ch-preset="dot">Dot Only</button>
+                                <button class="chip-btn" data-ch-preset="classic">Classic +</button>
+                                <button class="chip-btn" data-ch-preset="tight">Tight Pro</button>
+                                <button class="chip-btn" data-ch-preset="circle">Circle</button>
+                                <button class="chip-btn" data-ch-preset="crossdot">Cross + Dot</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Precision Controls Form -->
+                    <div class="crosshair-controls-pane">
+                        <div class="form-row">
+                            <label for="ch-style">Crosshair Type:</label>
+                            <select id="ch-style" class="custom-select">
+                                <option value="cross">Cross (+)</option>
+                                <option value="dot">Center Dot Only</option>
+                                <option value="cross_dot">Cross with Center Dot</option>
+                                <option value="circle">Hollow Circle</option>
+                            </select>
+                        </div>
+
+                        <div class="form-grid-2">
+                            <div class="form-row">
+                                <label for="ch-color">Crosshair Color:</label>
+                                <div class="color-input-container">
+                                    <input type="color" id="ch-color" value="#00ff88">
+                                    <span id="ch-color-hex">#00ff88</span>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <label for="ch-opacity">Opacity: <span id="ch-opacity-val">100%</span></label>
+                                <input type="range" id="ch-opacity" min="10" max="100" step="5" value="100">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="ch-size">Line Length / Radius: <span id="ch-size-val">8px</span></label>
+                            <input type="range" id="ch-size" min="2" max="30" step="1" value="8">
+                        </div>
+
+                        <div class="form-row">
+                            <label for="ch-thickness">Line Thickness: <span id="ch-thickness-val">2px</span></label>
+                            <input type="range" id="ch-thickness" min="1" max="10" step="1" value="2">
+                        </div>
+
+                        <div class="form-row">
+                            <label for="ch-gap">Center Gap: <span id="ch-gap-val">4px</span></label>
+                            <input type="range" id="ch-gap" min="0" max="25" step="1" value="4">
+                        </div>
+
+                        <div class="form-row checkbox-row">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="ch-outline" checked>
+                                <span class="checkmark"></span>
+                                Black Outline Border (Enhanced Visibility)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="btn-save-crosshair" class="btn-primary">Apply Crosshair</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ================= STATS & HISTORY MODAL ================= -->
+        <div id="stats-modal" class="modal-overlay hidden">
+            <div class="modal-card stats-card">
+                <div class="modal-header">
+                    <div class="modal-title-group">
+                        <i data-lucide="bar-chart-3"></i>
+                        <h2>PERFORMANCE DASHBOARD & HISTORY</h2>
+                    </div>
+                    <button class="btn-modal-close" id="btn-close-stats">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+
+                <!-- Career Overview Badges -->
+                <div class="career-stats-row">
+                    <div class="career-stat-card">
+                        <span class="c-label"><i data-lucide="play"></i> TOTAL DRILLS PLAYED</span>
+                        <span class="c-val" id="career-total-drills">0</span>
+                    </div>
+                    <div class="career-stat-card">
+                        <span class="c-label"><i data-lucide="crosshair"></i> TOTAL TARGETS DESTROYED</span>
+                        <span class="c-val highlight" id="career-total-hits">0</span>
+                    </div>
+                    <div class="career-stat-card">
+                        <span class="c-label"><i data-lucide="check-circle-2"></i> ALL-TIME ACCURACY</span>
+                        <span class="c-val" id="career-avg-accuracy">0%</span>
+                    </div>
+                    <div class="career-stat-card">
+                        <span class="c-label"><i data-lucide="flame"></i> HIGHEST COMBO STREAK</span>
+                        <span class="c-val" id="career-max-streak">0</span>
+                    </div>
+                </div>
+
+                <!-- High Scores per Mode Table -->
+                <div class="table-container">
+                    <h3 class="table-heading"><i data-lucide="award"></i> DRILL PERSONAL RECORDS</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Drill Mode</th>
+                                <th>High Score</th>
+                                <th>Best Accuracy</th>
+                                <th>Best TTK / Rate</th>
+                                <th>Rank Tier</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stats-table-body">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Recent Match History List -->
+                <div class="history-container">
+                    <h3 class="table-heading"><i data-lucide="clock"></i> RECENT SESSIONS</h3>
+                    <div class="history-list" id="stats-history-list">
+                        <!-- Populated via JS -->
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="btn-clear-history" class="btn-danger"><i data-lucide="trash-2"></i> Clear History Data</button>
+                    <button id="btn-done-stats" class="btn-primary">Close Dashboard</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts (Ordered by dependency) -->
+    <script src="js/storage.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/sensitivity.js"></script>
+    <script src="js/crosshair.js"></script>
+    <script src="js/engine3d.js"></script>
+    <script src="js/gameModes.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
